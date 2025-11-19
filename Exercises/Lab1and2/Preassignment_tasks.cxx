@@ -35,7 +35,8 @@ int main()
     std::cout<<"the magnitude of you vector is: "<<user_vector_magnitude<<"\n\n";
 
     // trying to load in data
-    std::string inputfile = "../../Data/MysteryData20000.txt";
+    //std::string inputfile = "../../Data/MysteryData20000.txt";
+    std::string inputfile = "input2D_float.txt";
     std::ifstream data_file;
     data_file.open(inputfile);
     // a check
@@ -49,13 +50,21 @@ int main()
     
 
     // reading data into variables
-    std::vector<int> data;
+    std::vector<std::string> data;
 
+    std::string line;
+    while (std::getline(data_file, line)){
+        data.push_back(line);
+    }
+
+    /*
     for (int i=0; i<5; i++){
-        double dataValue;
+        std::string dataValue;
         data_file >> dataValue;
         data.push_back(dataValue);
     }
+        */
+
     std::cout << "the data in the file is: "<< std::endl;
     for (auto dataVal : data){
         std:: cout << dataVal << std::endl;

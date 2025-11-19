@@ -15,6 +15,8 @@ int main()
     std::ifstream data_file; //
     data_file.open(inputfile);
 
+
+
     // a check
     if (!data_file.is_open()){
         std::cout<<"Error opening file"<<inputfile<<std::endl;
@@ -25,7 +27,7 @@ int main()
     }
     
     // reading data into variables
-    std::vector<float> data;
+    std::vector<double> data;
 
     // to read in a spesific number of data points:
     std::cout<<"how many lines do you want to print? ";
