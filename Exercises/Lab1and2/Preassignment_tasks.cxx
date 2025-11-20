@@ -3,10 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
-
-float magnitude2D(float x, float y){
-    return std::sqrt(x*x + y*y);
-}
+#include "CustomFunctions.h"
 
 int main()
 {
