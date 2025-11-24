@@ -5,45 +5,16 @@
 #include <sstream>
 #include "CustomFunctions.h"
 
-std::vector<std::vector<float> > readToVector(std::string fileName){
-    std::string line;
-    std::ifstream infile;
-    infile.open(fileName); // the text file is opened up?
-    std::vector<std::vector<float> > DataArray; // define the vector that everything is stored in
-
-    int counter = 0;
-    while (std::getline(infile, line)){ // this goes through each line of the infile?
-        std::vector<float> row; // defining each row
-        if (counter>0){ // this counter is to avoid reading the header line
-            
-            //std::cout<<"line is: "<< line<<"\n"; // cheack to see if we are reading the right thing
-            std::stringstream ss(line); // magic string stream??
-            float j; // use j to be hold each number
-            while (ss>>j){ // goes through the string stream
-                row.push_back(j); // first float
-                if (ss.peek()==','){
-                    ss.ignore();
-                }
-                
-            }
-
-            DataArray.push_back(row);
-        }
-        counter++;
-
+float chiSqu(std::vector<float> Ovals, std::vector<float> Evals, std::vector<float> SigmaVals){
+    float answer = 0.0;
+    for (float i=0; i<Ovals.size(); i++){
+        float topPart = (Ovals[i]-Evals[i])*(Ovals[i]-Evals[i]);
+        float bottemPart = SigmaVals[i]*SigmaVals[i];
+        answer += topPart/bottemPart;    
     }
-    return DataArray;
-
+    return answer;
 }
 
-void fileCheck(std::ifstream usedfile, std::string inputfile1){
-    if (!usedfile.is_open()){
-    std::cout<<"Error opening file"<<inputfile1<<std::endl;   
-    }
-    else{
-        std::cout<<"File:"<<inputfile1<<" opend successfully!"<<std::endl;
-    }
-}
 
 int main()
 {
@@ -55,28 +26,11 @@ int main()
     std::cin >> user_input;
 
     maxValue = std::stoi(user_input); // converts string to integer
-
-   // trying to load in data
-
-    std::string line;
-    std::string inputfile = "input2D_float.txt";
-    std::ifstream infile;
-    infile.open(inputfile); // the text file is opened up?
-    std::vector<std::vector<float> > DataArray; // define the vector that everything is stored in
-    // a check
-    //fileCheck(infile, inputfile);
-
-    if (!infile.is_open()){
-        std::cout<<"Error opening file"<<inputfile<<std::endl;
-        return -1;
-    }
-    else{
-        std::cout<<"File:"<<inputfile<<" opend successfully!"<<std::endl;
-    }
     
-    std::cout<< "does this work \n"
-    std::vector<std::vector<float>> Test1 = readToVector("input2D_float.txt");
-    print2DvectorData(Test1, maxValue);
+   // trying to load in data
+    std::vector<std::vector<float>> DataArray = readToVector("input2D_float.txt", maxValue);
+
+    print2DvectorData(DataArray);
     // calculating the magnitude of vectors
 
     for(int i=0; i<maxValue; i++){
@@ -84,8 +38,41 @@ int main()
         float y = DataArray[i][1];
         float magnitude = magnitude2D(x, y);
         std::cout<<"the magnitude of vector "<<i<<" is: "<< magnitude<<std::endl;
-
     }
 
-    infile.close();
+
+    // testing my fit function
+    std::cout<<"this is just before the pq function";
+    std::vector<float> pqArray = pqValues(DataArray);
+    std::cout<<"and this is just after";
+    std::cout<<"p value is: "<< pqArray[0]<<"\nand q value is: "<<pqArray[1] <<std::endl;
+    //ok I think this is working-ish ok atm 
+
+
+    std::vector<float> xValue, yValue_calculated, yValue_original;
+    xValue = SplitValues(DataArray, 0);
+    yValue_original = SplitValues(DataArray, 1);
+    std::cout<<"xValue file type "<< typeid(xValue).name()<<"\nyValue type "<< typeid(yValue_calculated).name()<<std::endl;
+    // not allowed to use a for loop:
+    
+
+    for(float x:xValue){
+        yValue_calculated.push_back(x*pqArray[0] + pqArray[1]);
+    }
+    
+    std::cout<<"my array contains:\n";
+    for (int j=0; j < maxValue; j++){
+        std::cout<<xValue[j];
+        std::cout<<" "<<yValue_calculated[j]<<std::endl;
+    }
+
+    //need to load in othe stuff as well
+    std::vector<std::vector<float>> ErrorVector = readToVector("error2D_float.txt", maxValue);
+
+    std::vector<float> y_error = SplitValues(ErrorVector, 1);
+    float chiSquare = chiSqu(yValue_original, yValue_calculated, y_error);
+    std::cout<<"the chi squared term is: "<<chiSquare<<"\n";
+
+
+    return 0;
 }
