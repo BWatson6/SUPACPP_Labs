@@ -5,16 +5,18 @@
 #include <sstream>
 #include "CustomFunctions.h"
 
-float chiSqu(std::vector<float> Ovals, std::vector<float> Evals, std::vector<float> SigmaVals){
-    float answer = 0.0;
-    for (float i=0; i<Ovals.size(); i++){
-        float topPart = (Ovals[i]-Evals[i])*(Ovals[i]-Evals[i]);
-        float bottemPart = SigmaVals[i]*SigmaVals[i];
-        answer += topPart/bottemPart;    
+float XtoPowerY(float x, float y){
+    int y_round = (int)y;
+    //std::cout<<y_round;
+    if (y_round==0){
+        return 1;
     }
-    return answer;
+    else{
+        y_round--;
+        y = (float)y_round;
+        return x * XtoPowerY(x, y);
+    }
 }
-
 
 int main()
 {
@@ -33,7 +35,7 @@ int main()
     print2DvectorData(DataArray);
     // calculating the magnitude of vectors
 
-    for(int i=0; i<maxValue; i++){
+    for(int i=0; i<DataArray.size(); i++){
         float x = DataArray[i][0];
         float y = DataArray[i][1];
         float magnitude = magnitude2D(x, y);
@@ -42,9 +44,8 @@ int main()
 
 
     // testing my fit function
-    std::cout<<"this is just before the pq function";
+    
     std::vector<float> pqArray = pqValues(DataArray);
-    std::cout<<"and this is just after";
     std::cout<<"p value is: "<< pqArray[0]<<"\nand q value is: "<<pqArray[1] <<std::endl;
     //ok I think this is working-ish ok atm 
 
@@ -61,7 +62,7 @@ int main()
     }
     
     std::cout<<"my array contains:\n";
-    for (int j=0; j < maxValue; j++){
+    for (int j=0; j < yValue_calculated.size(); j++){
         std::cout<<xValue[j];
         std::cout<<" "<<yValue_calculated[j]<<std::endl;
     }
@@ -73,6 +74,43 @@ int main()
     float chiSquare = chiSqu(yValue_original, yValue_calculated, y_error);
     std::cout<<"the chi squared term is: "<<chiSquare<<"\n";
 
+    std::cout<<"\n----------\n\nx^y is:\n\n";
+    //std::cout<<"data size is:"<<DataArray.size()<<std::endl;
+
+    float a = 7.9;
+    int b = (int)a;
+    float c = (float)b;
+    // ok so this thing above works
+    float test = XtoPowerY(3.0 ,3.4);
+    //std::cout<<" is: "<<test<<"\n";
+    
+    for (int i=0; i<DataArray.size(); i++){
+        float x_val = DataArray[i][0];
+        float y_val = DataArray[i][1];
+        std::cout<<x_val<<" "<<y_val<<"\n";
+        float result = XtoPowerY(x_val, y_val);
+        std::cout<<result<<std::endl;
+
+    }
+    std::string OutputFileName = "Assignment1OutputFile.txt";
+    // create an ofstream object
+    std::ofstream outStream;
+    // open a file as destination for the output stream
+    outStream.open(OutputFileName);
+
+    // check if output file opened correctly
+    if (!outStream.is_open()) {
+        std::cout<<"error opening file: "<< OutputFileName<< std::endl;
+        return -1;
+    }
+    else {
+        std::cout<<"output file"<<OutputFileName<<" opened successfully!"<<std::endl;
+    }
+    
+    for (int i=0; i<pqArray.size(); i++){
+        outStream<<pqArray[i]<<std::endl;
+    }
+    outStream.close(); //always close the file aswell
 
     return 0;
 }

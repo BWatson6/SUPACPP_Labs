@@ -11,7 +11,7 @@ float magnitude2D(float x, float y){
 void print2DvectorData(std::vector<std::vector<float>> Data){
     
     for (std::vector<float> &row : Data){ // going through each row in DataArray
-        
+        std::cout<<"row: ";
         for (float &c : row){ // going through each possition in each row
             std::cout << c<< "  ";
         }
@@ -41,7 +41,7 @@ std::vector<std::vector<float> > readToVector(std::string fileName, int maxLine)
     int i = 0;
     while (std::getline(infile, line)){ // this goes through each line of the infile?
         
-        if (i<maxLine){
+        if (i<=maxLine){
             i++;
             std::vector<float> row; // defining each row
             if (counter>0){ // this counter is to avoid reading the header line
@@ -102,4 +102,15 @@ std::vector<float> SplitValues(std::vector<std::vector<float>> vector2d, int ind
         array.push_back(row[index]);
     }
     return array;
+}
+
+
+float chiSqu(std::vector<float> Ovals, std::vector<float> Evals, std::vector<float> SigmaVals){
+    float answer = 0.0;
+    for (float i=0; i<Ovals.size(); i++){
+        float topPart = (Ovals[i]-Evals[i])*(Ovals[i]-Evals[i]);
+        float bottemPart = SigmaVals[i]*SigmaVals[i];
+        answer += topPart/bottemPart;    
+    }
+    return answer;
 }
