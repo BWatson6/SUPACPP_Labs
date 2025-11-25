@@ -5,11 +5,13 @@
 #include <fstream>
 
 float magnitude2D(float x, float y){
+    // function calculates the distance of a point from the origin 
     return std::sqrt(x*x + y*y);
 }
 
 
 std::vector<float> SplitValues(std::vector<std::vector<float>> vector2d, int index){
+    // function takes in a 2D vector and returns a colum of that vector depending on the spesified index 
     std::vector<float> array;
 
     for (std::vector<float> row : vector2d){
@@ -21,6 +23,8 @@ std::vector<float> SplitValues(std::vector<std::vector<float>> vector2d, int ind
 
 
 std::vector<float> magnitude2Darray(std::vector<std::vector<float> > xyArray){
+    // takes in a vector of different points and finds the distance from the origin for each one
+    // outputs a vector of the magnitudes
     std::vector<float> xArray, yArray, magnitudeArray;
     xArray = SplitValues(xyArray, 0);
     yArray = SplitValues(xyArray, 1);
@@ -32,6 +36,7 @@ std::vector<float> magnitude2Darray(std::vector<std::vector<float> > xyArray){
 
 
 void print2DvectorData(std::vector<std::vector<float>> Data){
+    //prints out values from a 2d vector to the terminal
     std::cout<<"\n---Data from file---\n";
     for (std::vector<float> &row : Data){ // going through each row in DataArray
         
@@ -46,6 +51,7 @@ void print2DvectorData(std::vector<std::vector<float>> Data){
 
 
 std::vector<std::vector<float> > readToVector(std::string fileName, int maxLine){
+    // reads a spesified text file into a 2d vector
     std::string line;
     std::ifstream infile;
     infile.open(fileName); // the text file is opened up?
@@ -70,7 +76,7 @@ std::vector<std::vector<float> > readToVector(std::string fileName, int maxLine)
             std::vector<float> row; // defining each row
             if (counter>0){ // this counter is to avoid reading the header line
                 
-                //std::cout<<"line is: "<< line<<"\n"; // cheack to see if we are reading the right thing
+                
                 std::stringstream ss(line); // magic string stream??
                 float j; // use j to be hold each number
                 while (ss>>j){ // goes through the string stream
@@ -93,7 +99,7 @@ std::vector<std::vector<float> > readToVector(std::string fileName, int maxLine)
 }
 
 std::vector<float> pqValues(std::vector<std::vector<float>> xyData){
-    //some thing is wrong with my p and q
+    // finds the fit perameters input a 2d vector of x and y values
     float xy_sum, xx_sum, y_sum, x_sum;
     xy_sum = 0.0;
     xx_sum = 0.0;
@@ -122,6 +128,7 @@ std::vector<float> pqValues(std::vector<std::vector<float>> xyData){
 
 
 float chiSqu(std::vector<float> Ovals, std::vector<float> Evals, std::vector<float> SigmaVals){
+    // chalculates chi squared takes in vectors of observed values, expected values and expected errors
     float answer = 0.0;
     
     for (float i=0; i<Ovals.size(); i++){
@@ -137,6 +144,8 @@ float chiSqu(std::vector<float> Ovals, std::vector<float> Evals, std::vector<flo
 
 
 float XtoPowerY(float x, float y){
+    //calculates x^y where y is rounded to the closest integer
+    
     int y_round = (int)round(y);
     //std::cout<<y_round;
     if (y_round==0){
@@ -150,6 +159,7 @@ float XtoPowerY(float x, float y){
 }
 
 std::vector<float> XtoPowerYvector(std::vector<std::vector<float>> xyArray){
+    // calculates x^y but the input is a 2D vector with the x and y vals
     std::vector<float> xVector, yVector, AnsVector;
     xVector = SplitValues(xyArray, 0);
     yVector = SplitValues(xyArray, 1);
@@ -161,6 +171,7 @@ std::vector<float> XtoPowerYvector(std::vector<std::vector<float>> xyArray){
 
 
 void SaveQuestion(std::vector<float> OutFile, std::string filename){
+    // the check to save data and also the saveing of the data itself is done in this function
     std::cout<<"would you like to save the resulting data?\n(1) Yes\n(2) No\n";
     int i;
     std::cin>> i;

@@ -5,11 +5,6 @@
 #include <sstream>
 #include "CustomFunctions.h"
 
-// print the loaded data in nicer
-// line before question
-// make the fitline perameters print better
-// make magnitude data print nicer
-// make x^y data print nicer
 
 
 int main()
@@ -27,7 +22,7 @@ int main()
     
    // trying to load in data
     std::vector<std::vector<float>> DataArray = readToVector("input2D_float.txt", maxValue);
-
+    // print out the data from the file
     print2DvectorData(DataArray);
 
 
@@ -41,7 +36,7 @@ int main()
             // calculating the magnitude of vectors
             std::vector<float> vectorMagnitude = magnitude2Darray(DataArray);
             std::cout<<"\n---points distance from origin---\n";
-            for(int i=0; i<DataArray.size(); i++){
+            for(int i=0; i<DataArray.size(); i++){ //printing out results
                 std::cout<< vectorMagnitude[i] <<std::endl;
             }
             std::cout<<"------\n";
@@ -60,11 +55,11 @@ int main()
             std::vector<float> xValue, yValue_calculated, yValue_original;
             xValue = SplitValues(DataArray, 0);
             yValue_original = SplitValues(DataArray, 1);
-            //i need to actualy calculate my yValue
+            //calculating the new y values
             for(float x:xValue){
                 yValue_calculated.push_back(x*pqArray[0] + pqArray[1]);
             }
-
+            // commented out code used to print out the new y values calculated with the fit perameters
             /*
             std::cout<<"my array contains:\n";
             for (int j=0; j < yValue_calculated.size(); j++){
@@ -73,8 +68,8 @@ int main()
             }
             */
 
-            std::vector<float> y_error = SplitValues(ErrorVector, 1);
-            
+            std::vector<float> y_error = SplitValues(ErrorVector, 1); // uncertainty in the y values
+            //calculating and printing chi squared
             float chiSquare = chiSqu(yValue_original, yValue_calculated, y_error);
             std::cout<<"chi squared term is: "<<chiSquare<<"\n------\n";
 
@@ -90,13 +85,10 @@ int main()
             std::vector<float> xtoyVector = XtoPowerYvector(DataArray);
 
             for (int i=0; i<DataArray.size(); i++){
-                float x_val = DataArray[i][0];
-                float y_val = DataArray[i][1];
-                //std::cout<<"xy values:"<<x_val<<" "<<y_val<<"\n";
                 std::cout<<xtoyVector[i]<<std::endl;
             }
             std::cout<<"------\n";
-            SaveQuestion(xtoyVector, "outputXtoTheY.txt");
+            SaveQuestion(xtoyVector, "outputXtoTheY.txt"); //checking if the given data should be saved
             break;
 
         }
