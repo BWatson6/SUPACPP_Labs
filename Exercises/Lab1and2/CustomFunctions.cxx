@@ -8,16 +8,40 @@ float magnitude2D(float x, float y){
     return std::sqrt(x*x + y*y);
 }
 
+
+std::vector<float> SplitValues(std::vector<std::vector<float>> vector2d, int index){
+    std::vector<float> array;
+
+    for (std::vector<float> row : vector2d){
+        //std::cout<< "row: "<<row[0]<<std::endl;
+        array.push_back(row[index]);
+    }
+    return array;
+}
+
+
+std::vector<float> magnitude2Darray(std::vector<std::vector<float> > xyArray){
+    std::vector<float> xArray, yArray, magnitudeArray;
+    xArray = SplitValues(xyArray, 0);
+    yArray = SplitValues(xyArray, 1);
+    for (int i=0 ; i<xArray.size(); i++){
+        magnitudeArray.push_back(magnitude2D(xArray[i], yArray[i]));
+    }
+    return magnitudeArray;
+}
+
+
 void print2DvectorData(std::vector<std::vector<float>> Data){
-    
+    std::cout<<"\n---Data from file---\n";
     for (std::vector<float> &row : Data){ // going through each row in DataArray
-        std::cout<<"row: ";
+        
         for (float &c : row){ // going through each possition in each row
             std::cout << c<< "  ";
         }
         std::cout<< '\n';
         
     }
+    std::cout<<"------";
 }
 
 
@@ -94,23 +118,86 @@ std::vector<float> pqValues(std::vector<std::vector<float>> xyData){
 }
 
 
-std::vector<float> SplitValues(std::vector<std::vector<float>> vector2d, int index){
-    std::vector<float> array;
 
-    for (std::vector<float> row : vector2d){
-        //std::cout<< "row: "<<row[0]<<std::endl;
-        array.push_back(row[index]);
-    }
-    return array;
-}
 
 
 float chiSqu(std::vector<float> Ovals, std::vector<float> Evals, std::vector<float> SigmaVals){
     float answer = 0.0;
+    
     for (float i=0; i<Ovals.size(); i++){
+       
+        //std::cout<<"ovals: "<<Ovals[i]<<" evals: "<< Evals[i]<<std::endl;
         float topPart = (Ovals[i]-Evals[i])*(Ovals[i]-Evals[i]);
+        
         float bottemPart = SigmaVals[i]*SigmaVals[i];
         answer += topPart/bottemPart;    
     }
     return answer;
+}
+
+
+float XtoPowerY(float x, float y){
+    int y_round = (int)round(y);
+    //std::cout<<y_round;
+    if (y_round==0){
+        return 1;
+    }
+    else{
+        y_round--;
+        y = (float)y_round;
+        return x * XtoPowerY(x, y);
+    }
+}
+
+std::vector<float> XtoPowerYvector(std::vector<std::vector<float>> xyArray){
+    std::vector<float> xVector, yVector, AnsVector;
+    xVector = SplitValues(xyArray, 0);
+    yVector = SplitValues(xyArray, 1);
+    for (int i=0; i<xVector.size(); i++){
+        AnsVector.push_back(XtoPowerY(xVector[i], yVector[i]));
+    }
+    return AnsVector;
+}
+
+
+void SaveQuestion(std::vector<float> OutFile){
+    std::cout<<"would you like to save the resulting data?\n(1) Yes\n(2) No\n";
+    int i;
+    std::cin>> i;
+    switch (i)
+    {
+    case 1:{
+        std::string OutputFileName = "Assignment1OutputFile.txt";
+        // create an ofstream object
+        std::ofstream outStream;
+        // open a file as destination for the output stream
+        outStream.open(OutputFileName);
+
+        // check if output file opened correctly
+        if (!outStream.is_open()) {
+            std::cout<<"error opening file: "<< OutputFileName<< std::endl;
+            
+        }
+        else {
+            std::cout<<"output file"<<OutputFileName<<" opened successfully!"<<std::endl;
+        }
+    
+        for (int i=0; i<OutFile.size(); i++){
+            outStream<<OutFile[i]<<std::endl;
+        }
+        outStream.close(); //always close the file aswell
+
+
+        break;
+    }
+    case 2:{
+        break;
+    }
+    
+    default:{
+        std::cout<<"you did not write a valid answer\n";
+        break;
+    }
+    }
+    return;
 }

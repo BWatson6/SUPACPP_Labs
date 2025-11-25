@@ -5,24 +5,20 @@
 #include <sstream>
 #include "CustomFunctions.h"
 
-float XtoPowerY(float x, float y){
-    int y_round = (int)y;
-    //std::cout<<y_round;
-    if (y_round==0){
-        return 1;
-    }
-    else{
-        y_round--;
-        y = (float)y_round;
-        return x * XtoPowerY(x, y);
-    }
-}
+// print the loaded data in nicer
+// line before question
+// make the fitline perameters print better
+// make magnitude data print nicer
+// make x^y data print nicer
+
 
 int main()
 {
+    int k;
+    bool go = true;
 
     // to read in a spesific number of data points:
-    std::cout<<"how many lines do you want to print? ";
+    std::cout<<"\nhow many lines do you want to print? \n";
     int maxValue;
     std::string user_input;
     std::cin >> user_input;
@@ -33,65 +29,121 @@ int main()
     std::vector<std::vector<float>> DataArray = readToVector("input2D_float.txt", maxValue);
 
     print2DvectorData(DataArray);
-    // calculating the magnitude of vectors
 
-    for(int i=0; i<DataArray.size(); i++){
-        float x = DataArray[i][0];
-        float y = DataArray[i][1];
-        float magnitude = magnitude2D(x, y);
-        std::cout<<"the magnitude of vector "<<i<<" is: "<< magnitude<<std::endl;
-    }
+
+    while(go){
+        std::cout<<"\n\nWhat function would you like to use on the data?\n(1)Find distance from origin  \n(2)Find fitline perameters  \n(3)x^y \n(4)exit code"<<std::endl;
+        std::cin >> k;
+
+        switch (k)
+        {
+        case 1:{
+            // calculating the magnitude of vectors
+            std::vector<float> vectorMagnitude = magnitude2Darray(DataArray);
+            std::cout<<"\n---points distance from origin---\n";
+            for(int i=0; i<DataArray.size(); i++){
+                std::cout<< vectorMagnitude[i] <<std::endl;
+            }
+            std::cout<<"------\n";
+            SaveQuestion(vectorMagnitude);
+
+            break;
+        }
+        case 2: {
+            // calculating peramters of fitline
+            std::vector<std::vector<float>> ErrorVector = readToVector("error2D_float.txt", maxValue);
+            std::vector<float> pqArray = pqValues(DataArray);
+            std::cout<<"\n---Line fit perameters---\n";
+            std::cout<<"\np value is: "<< pqArray[0]<<"\nq value is: "<<pqArray[1] <<std::endl;
+            
+            //calculating expected y values useing the fit perameters 
+            std::vector<float> xValue, yValue_calculated, yValue_original;
+            xValue = SplitValues(DataArray, 0);
+            yValue_original = SplitValues(DataArray, 1);
+            //i need to actualy calculate my yValue
+            for(float x:xValue){
+                yValue_calculated.push_back(x*pqArray[0] + pqArray[1]);
+            }
+
+            /*
+            std::cout<<"my array contains:\n";
+            for (int j=0; j < yValue_calculated.size(); j++){
+                std::cout<<xValue[j];
+                std::cout<<" "<<yValue_calculated[j]<<std::endl;
+            }
+            */
+
+            
+            std::vector<float> y_error = SplitValues(ErrorVector, 1);
+            
+            float chiSquare = chiSqu(yValue_original, yValue_calculated, y_error);
+            std::cout<<"chi squared term is: "<<chiSquare<<"\n------\n";
+
+            pqArray.push_back(chiSquare);
+            SaveQuestion(pqArray);
+            break;
+
+        }
+
+        case 3: {
+            // x^y
+            std::cout<<"\n---x^y---\n";
+            std::vector<float> xtoyVector = XtoPowerYvector(DataArray);
+
+            for (int i=0; i<DataArray.size(); i++){
+                float x_val = DataArray[i][0];
+                float y_val = DataArray[i][1];
+                //std::cout<<"xy values:"<<x_val<<" "<<y_val<<"\n";
+                std::cout<<xtoyVector[i]<<std::endl;
+            }
+            std::cout<<"------\n";
+            SaveQuestion(xtoyVector);
+            break;
+
+        }
+
+        case 4: {
+            std::cout<<"\n\n---STOPING CODE---\n\n";
+            go = false;
+            break;
+        }
+        
+        
+        default:{
+            std::cout<<"you did not pick a number between 1 and 4"<<std::endl;
+            break;
+        } //defalt
+        } // switch
+    } // while
+
+
+    
+
+
 
 
     // testing my fit function
     
-    std::vector<float> pqArray = pqValues(DataArray);
-    std::cout<<"p value is: "<< pqArray[0]<<"\nand q value is: "<<pqArray[1] <<std::endl;
-    //ok I think this is working-ish ok atm 
 
 
-    std::vector<float> xValue, yValue_calculated, yValue_original;
-    xValue = SplitValues(DataArray, 0);
-    yValue_original = SplitValues(DataArray, 1);
-    std::cout<<"xValue file type "<< typeid(xValue).name()<<"\nyValue type "<< typeid(yValue_calculated).name()<<std::endl;
+
+
+    //std::cout<<"xValue file type "<< typeid(xValue).name()<<"\nyValue type "<< typeid(yValue_calculated).name()<<std::endl;
     // not allowed to use a for loop:
     
-
+    /*
     for(float x:xValue){
         yValue_calculated.push_back(x*pqArray[0] + pqArray[1]);
     }
-    
-    std::cout<<"my array contains:\n";
-    for (int j=0; j < yValue_calculated.size(); j++){
-        std::cout<<xValue[j];
-        std::cout<<" "<<yValue_calculated[j]<<std::endl;
-    }
+    */
+
 
     //need to load in othe stuff as well
-    std::vector<std::vector<float>> ErrorVector = readToVector("error2D_float.txt", maxValue);
 
-    std::vector<float> y_error = SplitValues(ErrorVector, 1);
-    float chiSquare = chiSqu(yValue_original, yValue_calculated, y_error);
-    std::cout<<"the chi squared term is: "<<chiSquare<<"\n";
 
-    std::cout<<"\n----------\n\nx^y is:\n\n";
-    //std::cout<<"data size is:"<<DataArray.size()<<std::endl;
 
-    float a = 7.9;
-    int b = (int)a;
-    float c = (float)b;
-    // ok so this thing above works
-    float test = XtoPowerY(3.0 ,3.4);
-    //std::cout<<" is: "<<test<<"\n";
-    
-    for (int i=0; i<DataArray.size(); i++){
-        float x_val = DataArray[i][0];
-        float y_val = DataArray[i][1];
-        std::cout<<x_val<<" "<<y_val<<"\n";
-        float result = XtoPowerY(x_val, y_val);
-        std::cout<<result<<std::endl;
+    /*
 
-    }
     std::string OutputFileName = "Assignment1OutputFile.txt";
     // create an ofstream object
     std::ofstream outStream;
@@ -111,6 +163,7 @@ int main()
         outStream<<pqArray[i]<<std::endl;
     }
     outStream.close(); //always close the file aswell
+    */
 
     return 0;
 }

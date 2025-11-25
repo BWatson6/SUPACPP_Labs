@@ -11,3 +11,11 @@ std::vector<float> pqValues(std::vector<std::vector<float>>);
 std::vector<float> SplitValues(std::vector<std::vector<float>>, int );
 
 float chiSqu(std::vector<float>, std::vector<float>, std::vector<float>);
+
+std::vector<float> magnitude2Darray(std::vector<std::vector<float> >);
+
+float XtoPowerY(float, float);
+
+std::vector<float> XtoPowerYvector(std::vector<std::vector<float>>);
+
+void SaveQuestion(std::vector<float>);
