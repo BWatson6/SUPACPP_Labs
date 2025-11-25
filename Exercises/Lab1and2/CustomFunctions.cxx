@@ -160,14 +160,14 @@ std::vector<float> XtoPowerYvector(std::vector<std::vector<float>> xyArray){
 }
 
 
-void SaveQuestion(std::vector<float> OutFile){
+void SaveQuestion(std::vector<float> OutFile, std::string filename){
     std::cout<<"would you like to save the resulting data?\n(1) Yes\n(2) No\n";
     int i;
     std::cin>> i;
     switch (i)
     {
     case 1:{
-        std::string OutputFileName = "Assignment1OutputFile.txt";
+        std::string OutputFileName = filename;
         // create an ofstream object
         std::ofstream outStream;
         // open a file as destination for the output stream

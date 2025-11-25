@@ -18,4 +18,4 @@ float XtoPowerY(float, float);
 
 std::vector<float> XtoPowerYvector(std::vector<std::vector<float>>);
 
-void SaveQuestion(std::vector<float>);
+void SaveQuestion(std::vector<float>, std::string);

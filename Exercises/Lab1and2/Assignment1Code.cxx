@@ -45,7 +45,7 @@ int main()
                 std::cout<< vectorMagnitude[i] <<std::endl;
             }
             std::cout<<"------\n";
-            SaveQuestion(vectorMagnitude);
+            SaveQuestion(vectorMagnitude, "outputVectorMag.txt");
 
             break;
         }
@@ -73,14 +73,13 @@ int main()
             }
             */
 
-            
             std::vector<float> y_error = SplitValues(ErrorVector, 1);
             
             float chiSquare = chiSqu(yValue_original, yValue_calculated, y_error);
             std::cout<<"chi squared term is: "<<chiSquare<<"\n------\n";
 
             pqArray.push_back(chiSquare);
-            SaveQuestion(pqArray);
+            SaveQuestion(pqArray, "outputLinefitperam_andChi2.txt");
             break;
 
         }
@@ -97,7 +96,7 @@ int main()
                 std::cout<<xtoyVector[i]<<std::endl;
             }
             std::cout<<"------\n";
-            SaveQuestion(xtoyVector);
+            SaveQuestion(xtoyVector, "outputXtoTheY.txt");
             break;
 
         }
@@ -115,55 +114,5 @@ int main()
         } //defalt
         } // switch
     } // while
-
-
-    
-
-
-
-
-    // testing my fit function
-    
-
-
-
-
-    //std::cout<<"xValue file type "<< typeid(xValue).name()<<"\nyValue type "<< typeid(yValue_calculated).name()<<std::endl;
-    // not allowed to use a for loop:
-    
-    /*
-    for(float x:xValue){
-        yValue_calculated.push_back(x*pqArray[0] + pqArray[1]);
-    }
-    */
-
-
-    //need to load in othe stuff as well
-
-
-
-    /*
-
-    std::string OutputFileName = "Assignment1OutputFile.txt";
-    // create an ofstream object
-    std::ofstream outStream;
-    // open a file as destination for the output stream
-    outStream.open(OutputFileName);
-
-    // check if output file opened correctly
-    if (!outStream.is_open()) {
-        std::cout<<"error opening file: "<< OutputFileName<< std::endl;
-        return -1;
-    }
-    else {
-        std::cout<<"output file"<<OutputFileName<<" opened successfully!"<<std::endl;
-    }
-    
-    for (int i=0; i<pqArray.size(); i++){
-        outStream<<pqArray[i]<<std::endl;
-    }
-    outStream.close(); //always close the file aswell
-    */
-
     return 0;
 }
