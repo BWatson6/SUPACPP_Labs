@@ -63,6 +63,8 @@ Integration by hand (output needed to normalise function when plotting)
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
   //ToDo write an integrator
+
+  
   return -99;  
 }
 double FiniteFunction::integral(int Ndiv) { //public
