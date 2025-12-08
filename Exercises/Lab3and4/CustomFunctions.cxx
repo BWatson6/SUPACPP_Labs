@@ -213,3 +213,25 @@ void SaveQuestion(std::vector<float> OutFile, std::string filename){
     return;
     
 }
+
+std::vector<double> DataTo1dArray(std::string filename){
+     // reads a spesified text file into a 2d vector
+    std::string line;
+    std::ifstream infile;
+    infile.open(filename); // the text file is opened up?
+    std::vector<double>  DataArray; // define the vector that everything is stored in
+
+
+    if (!infile.is_open()){
+        std::cout<<"Error opening file"<<filename<<std::endl;
+        
+    }
+
+    else{
+        std::cout<<"File:"<<filename<<" opend successfully!"<<std::endl;
+    }
+    while(std::getline(infile, line)){
+        DataArray.push_back(std::stod(line));
+    }
+    return DataArray;
+} 

@@ -10,6 +10,7 @@ using std::filesystem::path;
 
 //Empty constructor
 FiniteFunction::FiniteFunction(){
+  std::cout<<"I AM IN THE WRONG PLACE"<<std::endl;
   m_RMin = -5.0;
   m_RMax = 5.0;
   this->checkPath("DefaultFunction");
@@ -18,6 +19,7 @@ FiniteFunction::FiniteFunction(){
 
 //initialised constructor
 FiniteFunction::FiniteFunction(double range_min, double range_max, std::string outfile){
+
   m_RMin = range_min;
   m_RMax = range_max;
   m_Integral = NULL;
@@ -63,9 +65,16 @@ Integration by hand (output needed to normalise function when plotting)
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
   //ToDo write an integrator
-
+  // very basic intergration
+  double intergral, segmentThickness;
+  segmentThickness = (m_RMax-m_RMin)/Ndiv;
+  intergral = 0;
+  for (int i=0; i<Ndiv; i++){
+    double i_double = i;
+    intergral += segmentThickness*this->callFunction(m_RMin+i_double*segmentThickness);
+  }
   
-  return -99;  
+  return intergral;  
 }
 double FiniteFunction::integral(int Ndiv) { //public
   if (Ndiv <= 0){
