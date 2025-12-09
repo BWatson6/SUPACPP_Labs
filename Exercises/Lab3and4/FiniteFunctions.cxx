@@ -10,7 +10,7 @@ using std::filesystem::path;
 
 //Empty constructor
 FiniteFunction::FiniteFunction(){
-  std::cout<<"I AM IN THE WRONG PLACE"<<std::endl;
+  std::cout<<"I am in the wrong place! (finite function)"<<std::endl;
   m_RMin = -5.0;
   m_RMax = 5.0;
   this->checkPath("DefaultFunction");
