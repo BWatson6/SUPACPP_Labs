@@ -12,7 +12,6 @@ using std::filesystem::path;
 
 //Empty constructor
 FiniteFunction::FiniteFunction(){
-  std::cout<<"I am in the wrong place! (finite function)"<<std::endl;
   m_RMin = -5.0;
   m_RMax = 5.0;
   this->checkPath("DefaultFunction");
@@ -138,6 +137,7 @@ void FiniteFunction::plotData(std::vector<double> &points, int Nbins, bool isdat
 }
 
 // new function to generate random numbers that follow a distribution
+// useing the metropolis algorithm
 void FiniteFunction::plotRandSamples(int NumbPoints, int Nbins){
   std::random_device rd;
   std::mt19937 mtEngine{rd()}; // initalised seed based on current time
@@ -149,7 +149,7 @@ void FiniteFunction::plotRandSamples(int NumbPoints, int Nbins){
 
   for (int i=0; i<NumbPoints-1; i++){
     // the normal distribution uses the previously random generated sample point now rather than whatever was happening before
-    std::normal_distribution Normal{RandSample[i], 0.5}; // this is random distribution for y
+    std::normal_distribution Normal{RandSample[i], 1.0}; // this is random distribution for y
     double rand_y = Normal(mtEngine);
 
     double funcRatio = this->callFunction(rand_y)/this->callFunction(RandSample[i]);

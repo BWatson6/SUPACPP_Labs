@@ -6,7 +6,6 @@
 // empty constructor
 
 GausFunction::GausFunction(){
-    std::cout<<"I AM IN THE WRONG PLACE (guas function)"<<std::endl;
     //calls perant class constructor
     FiniteFunction();
     m_mean = 0;
@@ -16,9 +15,9 @@ GausFunction::GausFunction(){
 
 // initalised constructor
 GausFunction::GausFunction(double range_min, double range_max, double mean, double sigma, std::string outfile){
-    std::cout<<"I am in the right place (gaus function)"<<std::endl;
+    
     //calls perant
-    std::cout<<"range min is:"<<range_min<<std::endl;
+    
     // seems like there is already an instance of the finite function perhaps use setters instead?? 
     // FiniteFunction(range_min, range_max, outfile);
     FiniteFunction::setRangeMin(range_min);
@@ -36,11 +35,23 @@ double GausFunction::GausEquation(double x){
 //Getters
 double GausFunction::meanVal(){return m_mean;};
 double GausFunction::sigmaVal(){return m_sigma;};
-
+//Setters
+void GausFunction::set_meanVal(double Mean) {m_mean = Mean;};
+void GausFunction::set_sigmaVal(double Sigma) {m_sigma = Sigma;};
 
 //something else
 double GausFunction::callFunction(double x){
     return this->GausEquation(x);
+}
+
+void GausFunction::printInfo(){
+    std::cout<<"\nrangeMin: " << m_RMin << std::endl;
+    std::cout<<"rangeMax: " << m_RMax << std::endl;
+    std::cout<<"intergral: " << m_Integral << std::endl;
+    std::cout<<"function: " << m_FunctionName << std::endl;
+    std::cout<<"perameters:"<<std::endl;
+    std::cout<<"    mean: "<< m_mean<< std::endl;
+    std::cout<<"    standard diviation "<< m_sigma<< std::endl;
 }
 
 //##################################
@@ -72,8 +83,26 @@ double CauchyLorentzFunction::callFunction(double x){
 }
 
 
+void CauchyLorentzFunction::printInfo(){
+    std::cout<<"\nrangeMin: " << m_RMin << std::endl;
+    std::cout<<"rangeMax: " << m_RMax << std::endl;
+    std::cout<<"intergral: " << m_Integral << std::endl;
+    std::cout<<"function: " << m_FunctionName << std::endl;
+    std::cout<<"perameters:"<<std::endl;
+    std::cout<<"    x0: "<< m_x0<< std::endl;
+    std::cout<<"    gamma: "<< m_lambda << std::endl;
+}
+
+//Getters
+double CauchyLorentzFunction::x0Val(){return m_x0;};
+double CauchyLorentzFunction::lambdaVal(){return m_lambda;};
+//Setters
+void CauchyLorentzFunction::set_x0Val(double X0) {m_x0 = X0;};
+void CauchyLorentzFunction::set_lambdaVal(double Lambda) {m_lambda = Lambda;};
+
 //##############################
 // new class crystalball
+//##############################
 
 CrystalBall::CrystalBall(){
     // the empty one
@@ -120,3 +149,27 @@ double CrystalBall::CrystalEquation(double x){
 double CrystalBall::callFunction(double x){
     return this->CrystalEquation(x);
 }
+
+
+void CrystalBall::printInfo(){
+    std::cout<<"\nrangeMin: " << m_RMin << std::endl;
+    std::cout<<"rangeMax: " << m_RMax << std::endl;
+    std::cout<<"intergral: " << m_Integral << std::endl;
+    std::cout<<"function: " << m_FunctionName << std::endl;
+    std::cout<<"perameters:"<<std::endl;
+    std::cout<<"    x_bar: "<< m_xbar<< std::endl;
+    std::cout<<"    sigma: "<< m_sigma << std::endl;
+    std::cout<<"    alpha: "<< m_alpha << std::endl;
+    std::cout<<"    n: "<< m_n << std::endl;
+}
+
+//Getters
+double CrystalBall::xbarVal(){return m_xbar;};
+double CrystalBall::sigmaVal(){return m_sigma;};
+double CrystalBall::alphaVal(){return m_alpha;};
+double CrystalBall::nVal(){return m_n;};
+//Setters
+void CrystalBall::set_xbarVal(double Xbar) {m_xbar = Xbar;};
+void CrystalBall::set_sigmaVal(double Sigma) {m_sigma = Sigma;};
+void CrystalBall::set_alphaVal(double Alpha) {m_alpha = Alpha;};
+void CrystalBall::set_nVal(double N) {m_n = N;};
