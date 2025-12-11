@@ -24,6 +24,9 @@ public:
   virtual void printInfo(); //Dump parameter info about the current function (Overridable)
   virtual double callFunction(double x); //Call the function with value x (Overridable)
 
+  //added function
+  void plotRandSamples(int NumbPoints, int Nbins); // hopefully will plot random numbers that match the given distribution
+
   //Protected members can be accessed by child classes but not users
 protected:
   double m_RMin;

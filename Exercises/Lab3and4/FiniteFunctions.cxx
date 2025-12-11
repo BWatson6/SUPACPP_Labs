@@ -4,6 +4,8 @@
 #include "FiniteFunctions.h"
 #include <filesystem> //To check extensions in a nice way
 
+#include <random>
+
 #include "gnuplot-iostream.h" //Needed to produce plots (not part of the course) 
 
 using std::filesystem::path;
@@ -64,7 +66,7 @@ Integration by hand (output needed to normalise function when plotting)
 ###################
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
-  //ToDo write an integrator
+
   // very basic intergration
   double intergral, segmentThickness;
   segmentThickness = (m_RMax-m_RMin)/Ndiv;
@@ -133,6 +135,43 @@ void FiniteFunction::plotData(std::vector<double> &points, int Nbins, bool isdat
     m_samples = this->makeHist(points,Nbins);
     m_plotsamplepoints = true;
   }
+}
+
+// new function to generate random numbers that follow a distribution
+void FiniteFunction::plotRandSamples(int NumbPoints, int Nbins){
+  std::random_device rd;
+  std::mt19937 mtEngine{rd()}; // initalised seed based on current time
+  std::uniform_real_distribution uniform{m_RMin, m_RMax}; // random number that is in the finite range
+  std::uniform_real_distribution TRandom{0.0, 1.0}; // For generating T, doesn't need to be in loop
+  std::vector<double> RandSample; // storing the Data points as a vector
+  double rand_x0 = uniform(mtEngine);
+  RandSample.push_back(rand_x0);
+
+  for (int i=0; i<NumbPoints-1; i++){
+    // the normal distribution uses the previously random generated sample point now rather than whatever was happening before
+    std::normal_distribution Normal{RandSample[i], 0.5}; // this is random distribution for y
+    double rand_y = Normal(mtEngine);
+
+    double funcRatio = this->callFunction(rand_y)/this->callFunction(RandSample[i]);
+
+    if (funcRatio>1){
+        funcRatio = 1.0;
+    } // after this if statment funcRatio is A from Assignment 2, sampling step 3
+
+    double T = TRandom(mtEngine);
+    if (T<funcRatio){
+      RandSample.push_back(rand_y);
+    }
+
+    else {
+      RandSample.push_back(RandSample[i]);
+    }
+
+  }
+  // now that we've got the data now need to plot it
+  std::vector<double>* SamplePoints = &RandSample;
+  this->plotData(*SamplePoints, Nbins, false);
+  // should be it??
 }
 
 

@@ -100,7 +100,7 @@ double CrystalBall::CrystalEquation(double x){
     sigma = m_sigma;
     alpha = m_alpha;
     n = m_n;
-    A = pow((n/pow(abs(alpha), 2)),n)*exp(-pow(abs(alpha), 2)/2);
+    A = pow((n/abs(alpha)),n)*exp(-pow(abs(alpha), 2)/2);
     B = n/abs(alpha) - abs(alpha);
     C = n/abs(alpha)*1/(n-1)*exp(-pow(abs(alpha), 2)/2);
     D = sqrt(M_PI/2)*(1+std::erf(abs(alpha)/sqrt(2)));
@@ -108,7 +108,7 @@ double CrystalBall::CrystalEquation(double x){
 
     double check = (x-xbar)/sigma;
     if (check> -alpha){
-        solution = N*exp(-(x-xbar)/(2*sigma*sigma));
+        solution = N*exp(-pow((x-xbar),2)/(2*sigma*sigma));
     }
 
     else{
